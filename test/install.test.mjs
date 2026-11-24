@@ -104,6 +104,18 @@ test('a missing catalog.json is a clear, non-zero failure', () => {
   assert.match(out, /catalog\.json not found/);
 });
 
+test('a UTF-8 BOM in catalog.json does not break the installer', () => {
+  // Hand-editing catalog.json on Windows easily adds a BOM; JSON.parse would throw.
+  const root = sandbox();
+  const catalog = path.join(root, 'catalog.json');
+  fs.writeFileSync(catalog, '\uFEFF' + fs.readFileSync(catalog, 'utf8'), 'utf8');
+
+  const { code, out } = run(root);
+  assert.equal(code, 0, out);
+  assert.match(out, /verify: OK/);
+  assert.equal(entryOf(root)?.name, 'tokenskip-context');
+});
+
 test('--help explains the modes without touching the filesystem', () => {
   const root = sandbox();
   const { code, out } = run(root, '--help');

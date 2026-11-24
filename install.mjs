@@ -50,7 +50,9 @@ const TARGET = path.join(PLUGIN, 'skills', SKILL);
 const CATALOG = path.join(PLUGIN, 'catalog.json');
 
 const sha = (p) => crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex').slice(0, 12);
-const readCatalog = () => JSON.parse(fs.readFileSync(CATALOG, 'utf8'));
+// A UTF-8 BOM in catalog.json (easy to introduce when the file is hand-edited on
+// Windows) makes JSON.parse throw on a perfectly valid document — strip it.
+const readCatalog = () => JSON.parse(fs.readFileSync(CATALOG, 'utf8').replace(/^\uFEFF/, ''));
 const writeCatalog = (c) => fs.writeFileSync(CATALOG, JSON.stringify(c, null, 2) + '\n', 'utf8');
 const findIndex = (c) => c.skills.findIndex((s) => s.name === SKILL);
 

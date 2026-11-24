@@ -1,6 +1,6 @@
 {
   "name": "tokenskip-context",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TokenSkip-derived context compression for coding agents: drop narration aggressively, pin load-bearing tokens verbatim.",
   "type": "module",
   "license": "MIT",

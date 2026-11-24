@@ -17,7 +17,7 @@ Thanks for looking. This pack is deliberately small: one skill, one installer, o
 
 ## Ground rules for a patch
 
-1. `node --test` must pass (11 tests today, zero dependencies).
+1. `node --test` must pass (12 tests today, zero dependencies).
 2. `node --check install.mjs` and `node --check` on everything in `bench/` and `test/` must pass.
 3. If you touch `install.mjs`, run the installer against a throwaway root and confirm both directions:
    ```bash

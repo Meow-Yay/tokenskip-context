@@ -5,6 +5,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.0.1] — 2026-11-24
+
+### Fixed
+
+- `install.mjs` no longer throws on a `catalog.json` that starts with a UTF-8 BOM. A BOM is easy to introduce by hand-editing the file on Windows and made `JSON.parse` fail on an otherwise valid document. Covered by a new test (12 tests now).
+
 ## [1.0.0] — 2026-11-24
 
 First public release.

@@ -141,7 +141,7 @@ tokenskip-context/
 ## 开发
 
 ```bash
-node --test                               # 11 项测试，无需 DSH 环境
+node --test                               # 12 项测试，无需 DSH 环境
 node bench/bench.mjs <transcript.jsonl>   # 在任意 transcript 上重放保留规则
 ```
 

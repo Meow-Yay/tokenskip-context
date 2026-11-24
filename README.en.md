@@ -141,7 +141,7 @@ tokenskip-context/
 ## Develop
 
 ```bash
-node --test                               # 11 tests, no DSH install required
+node --test                               # 12 tests, no DSH install required
 node bench/bench.mjs <transcript.jsonl>   # replay the retention rules on any transcript
 ```
 
