@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['18', '20', '22', '24']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Syntax check
+        run: |
+          node --check install.mjs
+          for f in bench/*.mjs test/*.mjs; do node --check "$f"; done
+
+      - name: Tests
+        run: node --test
+
+      - name: Installer smoke test against a throwaway plugin root
+        run: |
+          set -eu
+          tmp="$(mktemp -d)"
+          printf '{"skills":[],"stats":{}}\n' > "$tmp/catalog.json"
+          DSH_CODEX_SKILLS_PLUGIN="$tmp" node install.mjs
+          DSH_CODEX_SKILLS_PLUGIN="$tmp" node install.mjs --status
+          node -e '
+            const c = require(process.argv[1] + "/catalog.json");
+            const e = c.skills.find((s) => s.name === "tokenskip-context");
+            if (!e) { console.error("entry missing"); process.exit(1); }
+            if (e.modelInvocable !== false) { console.error("must stay opt-in"); process.exit(1); }
+            console.log("catalog entry ok:", e.name, "modelInvocable=" + e.modelInvocable);
+          ' "$tmp"
+          DSH_CODEX_SKILLS_PLUGIN="$tmp" node install.mjs --uninstall
+          test ! -e "$tmp/skills/tokenskip-context"
+          echo "smoke test ok"
+
+  docs:
+    name: docs links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Every relative markdown link resolves
+        run: |
+          node -e '
+            const fs = require("fs");
+            const path = require("path");
+            const files = ["README.md", "README.en.md", "docs/measurement.md", "bench/README.md", "CONTRIBUTING.md", "CHANGELOG.md"];
+            let bad = 0;
+            for (const f of files) {
+              if (!fs.existsSync(f)) continue;
+              const md = fs.readFileSync(f, "utf8");
+              for (const m of md.matchAll(/\]\(([^)\s#]+)(#[^)]*)?\)/g)) {
+                const target = m[1];
+                if (/^https?:/.test(target) || target.startsWith("mailto:")) continue;
+                const abs = path.resolve(path.dirname(f), target);
+                if (!fs.existsSync(abs)) { console.error(`${f}: broken link -> ${target}`); bad++; }
+              }
+            }
+            if (bad) process.exit(1);
+            console.log("all relative links resolve");
+          '

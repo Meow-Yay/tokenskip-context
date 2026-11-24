@@ -1,0 +1,42 @@
+{
+  "name": "tokenskip-context",
+  "version": "1.0.0",
+  "description": "TokenSkip-derived context compression for coding agents: drop narration aggressively, pin load-bearing tokens verbatim.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Meow-Yay",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Meow-Yay/tokenskip-context.git"
+  },
+  "homepage": "https://github.com/Meow-Yay/tokenskip-context#readme",
+  "bugs": {
+    "url": "https://github.com/Meow-Yay/tokenskip-context/issues"
+  },
+  "keywords": [
+    "tokenskip",
+    "context-compression",
+    "token-saving",
+    "agent",
+    "skill",
+    "prompt-engineering"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "install-skill": "node install.mjs",
+    "status": "node install.mjs --status",
+    "uninstall": "node install.mjs --uninstall",
+    "test": "node --test",
+    "bench": "node bench/bench.mjs"
+  },
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "install.mjs",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ]
+}

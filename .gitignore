@@ -1,0 +1,28 @@
+# session transcripts and decompressed dumps — never commit these
+*.jsonl
+*.jsonl.gz
+*.zstd
+session.*.*
+
+# scratch output from bench runs
+bench/out/
+*.tmp
+*.log
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# editors
+.vscode/
+.idea/

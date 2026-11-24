@@ -1,0 +1,6 @@
+interface:
+  display_name: "TokenSkip Context 省 Token"
+  short_description: "按 TokenSkip 的 force-token 规则压缩上下文：激进丢弃叙述，逐字保留路径、签名、错误、数值与决策"
+  default_prompt: "使用 $tokenskip-context 完成本次任务，档位：balanced。保留交付物与必要验证，只裁剪叙述与重复读取。"
+policy:
+  allow_implicit_invocation: false
